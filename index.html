@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LittleWords — Flashcards Bilingües</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tangerine: #F97B4B;
+    --mango: #FFB347;
+    --bubblegum: #FF8FAB;
+    --mint: #72D6C9;
+    --cream: #FFFBF5;
+    --cacao: #3D2A1E;
+    --cacao-light: #6B4C3B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    color: var(--cacao);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid rgba(61,42,30,0.07);
+  }
+
+  .logo {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--cacao);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span {
+    color: var(--tangerine);
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  nav ul a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--cacao-light);
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--tangerine); }
+
+  .nav-cta {
+    background: var(--tangerine);
+    color: var(--cream) !important;
+    padding: 9px 22px;
+    border-radius: 50px;
+    font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: #e06a3a !important; color: var(--cream) !important; }
+
+  /* HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 48px;
+    padding: 80px 48px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: #FFE8D6;
+    color: var(--tangerine);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 3.4rem;
+    line-height: 1.1;
+    color: var(--cacao);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--tangerine);
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--cacao-light);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 440px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--tangerine);
+    color: var(--cream);
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(249,123,75,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249,123,75,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cacao);
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 2px solid rgba(61,42,30,0.18);
+    transition: border-color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--cacao); }
+
+  /* HERO CARDS VISUAL */
+  .hero-visual {
+    position: relative;
+    height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 260px;
+    height: 340px;
+  }
+
+  .flash-card {
+    position: absolute;
+    width: 220px;
+    height: 290px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 32px rgba(61,42,30,0.12);
+    font-family: 'Nunito', sans-serif;
+    padding: 24px;
+  }
+
+  .fc-1 {
+    background: white;
+    top: 50px;
+    left: 0px;
+    transform: rotate(-6deg);
+    z-index: 1;
+    border-bottom: 8px solid var(--mint);
+  }
+  .fc-2 {
+    background: white;
+    top: 30px;
+    left: 30px;
+    transform: rotate(2deg);
+    z-index: 2;
+    border-bottom: 8px solid var(--bubblegum);
+  }
+  .fc-3 {
+    background: white;
+    top: 10px;
+    left: 20px;
+    transform: rotate(-1deg);
+    z-index: 3;
+    border-bottom: 8px solid var(--tangerine);
+  }
+
+  .fc-number {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #ccc;
+    align-self: flex-start;
+    letter-spacing: 1px;
+  }
+
+  .fc-emoji {
+    font-size: 4.5rem;
+    margin: 8px 0;
+    line-height: 1;
+  }
+
+  .fc-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+  }
+
+  .fc-name-es {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--cacao);
+    margin-bottom: 2px;
+  }
+
+  .fc-name-en {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--cacao-light);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* FLOATING BUBBLES */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+  }
+  .b1 { width: 120px; height: 120px; background: var(--mango); top: 10px; right: 10px; }
+  .b2 { width: 70px; height: 70px; background: var(--bubblegum); bottom: 40px; left: 10px; }
+  .b3 { width: 40px; height: 40px; background: var(--mint); top: 60px; left: -10px; }
+
+  /* TRUST BAR */
+  .trust-bar {
+    background: var(--cacao);
+    color: var(--cream);
+    padding: 16px 48px;
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .trust-item span:first-child { font-size: 1.1rem; }
+
+  /* SECTION COMMON */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 48px;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tangerine);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2.2rem;
+    color: var(--cacao);
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--cacao-light);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* COLLECTIONS / SETS */
+  .sets-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .set-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(61,42,30,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .set-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(61,42,30,0.13);
+  }
+
+  .set-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+  }
+
+  .set-card.tangerine::after { background: var(--tangerine); }
+  .set-card.mint::after { background: var(--mint); }
+  .set-card.bubblegum::after { background: var(--bubblegum); }
+
+  .set-emoji { font-size: 2.8rem; margin-bottom: 14px; }
+
+  .set-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+  }
+
+  .tag-tangerine { background: #FFE8D6; color: var(--tangerine); }
+  .tag-mint { background: #D6F5F2; color: #3aaba0; }
+  .tag-bubblegum { background: #FFE0E8; color: #d45f7f; }
+
+  .set-name {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: var(--cacao);
+    margin-bottom: 6px;
+  }
+
+  .set-desc {
+    font-size: 0.85rem;
+    color: var(--cacao-light);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .set-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .set-price {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--cacao);
+  }
+
+  .set-cards-count {
+    font-size: 0.78rem;
+    color: var(--cacao-light);
+    font-weight: 500;
+  }
+
+  .btn-small {
+    background: var(--tangerine);
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.2s;
+  }
+
+  .btn-small:hover { background: #e06a3a; }
+
+  .btn-small.outline {
+    background: transparent;
+    color: var(--cacao);
+    border: 2px solid rgba(61,42,30,0.18);
+  }
+
+  /* HOW IT WORKS */
+  .how-section {
+    background: #FFF5EE;
+    border-radius: 28px;
+    padding: 64px 56px;
+    max-width: 1200px;
+    margin: 0 auto 72px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .step-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--tangerine);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--cacao);
+  }
+
+  .step-desc {
+    font-size: 0.88rem;
+    color: var(--cacao-light);
+    line-height: 1.7;
+  }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .why-item {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(61,42,30,0.06);
+  }
+
+  .why-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+
+  .why-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--cacao);
+    margin-bottom: 6px;
+  }
+
+  .why-desc {
+    font-size: 0.82rem;
+    color: var(--cacao-light);
+    line-height: 1.65;
+  }
+
+  /* PREVIEW / SAMPLE */
+  .preview-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    padding: 72px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .mini-card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(61,42,30,0.08);
+    border-bottom: 4px solid var(--tangerine);
+  }
+
+  .mini-card:nth-child(2) { border-color: var(--mint); }
+  .mini-card:nth-child(3) { border-color: var(--bubblegum); }
+  .mini-card:nth-child(4) { border-color: var(--mango); }
+  .mini-card:nth-child(5) { border-color: var(--mint); }
+  .mini-card:nth-child(6) { border-color: var(--bubblegum); }
+
+  .mini-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .mini-es { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.85rem; color: var(--cacao); }
+  .mini-en { font-size: 0.7rem; color: var(--cacao-light); }
+
+  /* CTA BANNER */
+  .cta-banner {
+    background: var(--cacao);
+    border-radius: 28px;
+    padding: 64px 56px;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: var(--tangerine);
+    opacity: 0.12;
+    top: -80px; right: -60px;
+  }
+
+  .cta-banner::after {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--mint);
+    opacity: 0.12;
+    bottom: -60px; left: -40px;
+  }
+
+  .cta-banner h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+    color: var(--cream);
+    margin-bottom: 14px;
+    position: relative; z-index: 1;
+  }
+
+  .cta-banner p {
+    color: rgba(255,251,245,0.75);
+    font-size: 1rem;
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+
+  .cta-banner .btn-primary {
+    position: relative; z-index: 1;
+    font-size: 1rem;
+    padding: 16px 36px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--cream);
+    border-top: 2px solid rgba(61,42,30,0.07);
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--cacao);
+  }
+
+  .footer-logo span { color: var(--tangerine); }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--cacao-light);
+    text-decoration: none;
+  }
+
+  .footer-links a:hover { color: var(--tangerine); }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(61,42,30,0.45);
+  }
+
+  /* ANNOTATION LAYER */
+  .annotation {
+    position: absolute;
+    background: #FFFC00;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: #333;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 200;
+  }
+
+  .annotation::before {
+    content: '→ ';
+    font-weight: 900;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 48px 24px; }
+    .hero-visual { height: 280px; }
+    .sets-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    nav { padding: 16px 24px; }
+    nav ul { gap: 16px; }
+    section { padding: 48px 24px; }
+    .preview-section { grid-template-columns: 1fr; padding: 48px 24px; }
+    .cta-banner { padding: 40px 28px; margin: 0 24px 48px; }
+    .how-section { padding: 40px 28px; margin: 0 24px 48px; }
+    footer { flex-direction: column; text-align: center; padding: 32px 24px; }
+    .trust-bar { gap: 24px; padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Little<span>Words</span></div>
+  <ul>
+    <li><a href="#">Colecciones</a></li>
+    <li><a href="#">¿Cómo funciona?</a></li>
+    <li><a href="#">Sobre nosotros</a></li>
+    <li><a href="#" class="nav-cta">Ver tienda</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">✨ Bilingüe · Español / Inglés</div>
+    <h1>Aprende palabras<br>nuevas <em>jugando</em></h1>
+    <p>Flashcards imprimibles diseñadas para los más pequeños. Vocabulario visual, colores vivos y dos idiomas en cada carta.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary">Ver colecciones →</a>
+      <a href="#" class="btn-secondary">Ver muestra gratis</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+    <div class="card-stack">
+      <div class="flash-card fc-1">
+        <span class="fc-number">03</span>
+        <div class="fc-dot" style="background:var(--mint);"></div>
+        <div class="fc-emoji">🐱</div>
+        <div class="fc-name-es">gato</div>
+        <div class="fc-name-en">cat</div>
+      </div>
+      <div class="flash-card fc-2">
+        <span class="fc-number">07</span>
+        <div class="fc-dot" style="background:var(--bubblegum);"></div>
+        <div class="fc-emoji">🐘</div>
+        <div class="fc-name-es">elefante</div>
+        <div class="fc-name-en">elephant</div>
+      </div>
+      <div class="flash-card fc-3">
+        <span class="fc-number">01</span>
+        <div class="fc-dot" style="background:var(--tangerine);"></div>
+        <div class="fc-emoji">🐶</div>
+        <div class="fc-name-es">perro</div>
+        <div class="fc-name-en">dog</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span>🖨️</span><span>Imprime al instante</span></div>
+  <div class="trust-item"><span>📥</span><span>Descarga inmediata</span></div>
+  <div class="trust-item"><span>🌍</span><span>Español + Inglés</span></div>
+  <div class="trust-item"><span>✏️</span><span>Diseñadas por educadores</span></div>
+  <div class="trust-item"><span>♻️</span><span>Sin plástico, 100% papel</span></div>
+</div>
+
+<!-- SETS / COLLECTIONS -->
+<section>
+  <div class="section-label">Colecciones disponibles</div>
+  <h2 class="section-title">Elige tu set favorito</h2>
+  <p class="section-sub">Cada set incluye 30 flashcards organizadas por categorías temáticas. Perfectas para imprimir, recortar y jugar.</p>
+
+  <div class="sets-grid">
+    <div class="set-card tangerine">
+      <div class="set-emoji">🐾</div>
+      <div class="set-tag tag-tangerine">Set 01 · Disponible</div>
+      <div class="set-name">Animales</div>
+      <div class="set-desc">30 cartas con animales domésticos, de granja, salvajes, aves y marinos. El set perfecto para empezar.</div>
+      <div class="set-meta">
+        <div>
+          <div class="set-price">$3.99 <span style="font-size:0.75rem;font-weight:500;color:var(--cacao-light);text-decoration:line-through;">$4.99</span></div>
+          <div class="set-cards-count">30 flashcards · 6 categorías</div>
+        </div>
+        <button class="btn-small">Comprar →</button>
+      </div>
+    </div>
+
+    <div class="set-card mint">
+      <div class="set-emoji">🍎</div>
+      <div class="set-tag tag-mint">Set 02 · Próximamente</div>
+      <div class="set-name">Frutas y Verduras</div>
+      <div class="set-desc">Del mercado a las manos de tus peques. Vocabulario de alimentos en dos idiomas.</div>
+      <div class="set-meta">
+        <div>
+          <div class="set-price">$4.99</div>
+          <div class="set-cards-count">30 flashcards · 6 categorías</div>
+        </div>
+        <button class="btn-small outline">Avisarme</button>
+      </div>
+    </div>
+
+    <div class="set-card bubblegum">
+      <div class="set-emoji">🔵</div>
+      <div class="set-tag tag-bubblegum">Set 03 · Próximamente</div>
+      <div class="set-name">Colores y Formas</div>
+      <div class="set-desc">Para los más pequeños: identifica colores, formas y tamaños de forma visual y divertida.</div>
+      <div class="set-meta">
+        <div>
+          <div class="set-price">$4.99</div>
+          <div class="set-cards-count">30 flashcards · 6 categorías</div>
+        </div>
+        <button class="btn-small outline">Avisarme</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW MUESTRA -->
+<div class="preview-section">
+  <div>
+    <div class="section-label">Vista previa</div>
+    <h2 class="section-title">Mira cómo son<br>las cartas</h2>
+    <p class="section-sub">Cada carta incluye el número de carta, un color de categoría, el emoji del animal, el nombre en español e inglés, y una barra de color identificativa.</p>
+    <a href="#" class="btn-primary" style="display:inline-block; margin-top:8px;">Descargar muestra gratis</a>
+  </div>
+  <div class="mini-grid">
+    <div class="mini-card">
+      <span class="mini-emoji">🐶</span>
+      <div class="mini-es">perro</div>
+      <div class="mini-en">dog</div>
+    </div>
+    <div class="mini-card">
+      <span class="mini-emoji">🐱</span>
+      <div class="mini-es">gato</div>
+      <div class="mini-en">cat</div>
+    </div>
+    <div class="mini-card">
+      <span class="mini-emoji">🐦</span>
+      <div class="mini-es">pájaro</div>
+      <div class="mini-en">bird</div>
+    </div>
+    <div class="mini-card">
+      <span class="mini-emoji">🐄</span>
+      <div class="mini-es">vaca</div>
+      <div class="mini-en">cow</div>
+    </div>
+    <div class="mini-card">
+      <span class="mini-emoji">🐬</span>
+      <div class="mini-es">delfín</div>
+      <div class="mini-en">dolphin</div>
+    </div>
+    <div class="mini-card">
+      <span class="mini-emoji">🦁</span>
+      <div class="mini-es">león</div>
+      <div class="mini-en">lion</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="section-label">¿Cómo funciona?</div>
+  <h2 class="section-title">Del clic a las manos<br>en 3 pasos</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Elige tu set</div>
+      <div class="step-desc">Selecciona la colección que más le guste a tu peque. Cada set tiene 30 cartas organizadas por temas.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Descarga al instante</div>
+      <div class="step-desc">Recibes el PDF listo para imprimir. Sin esperas, sin envíos. Directo a tu carpeta de descargas.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">¡A jugar!</div>
+      <div class="step-desc">Imprime, recorta y empieza. Puedes plastificarlas para que duren más. El aprendizaje empieza hoy.</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY -->
+<section>
+  <div class="section-label">Por qué LittleWords</div>
+  <h2 class="section-title">Diseñadas para aprender<br>de verdad</h2>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-icon">🎨</div>
+      <div class="why-title">Diseño pedagógico</div>
+      <div class="why-desc">Colores, emojis y tipografía pensados para captar la atención de los más pequeños.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon">🌍</div>
+      <div class="why-title">Bilingüe desde el principio</div>
+      <div class="why-desc">Cada carta muestra el nombre en español e inglés. Aprendizaje natural sin esfuerzo extra.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon">💶</div>
+      <div class="why-title">Precio accesible</div>
+      <div class="why-desc">Un set completo de 30 cartas por menos de $5. Sin suscripciones, sin sorpresas.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon">🖨️</div>
+      <div class="why-title">Imprime cuantas veces quieras</div>
+      <div class="why-desc">Una compra, uso ilimitado. Imprime para casa, para el cole, para los abuelos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <h2>¿Lista para empezar?</h2>
+  <p>Descarga la muestra gratis y comprueba la calidad antes de comprar.</p>
+  <a href="#" class="btn-primary">Descargar muestra gratis →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Little<span>Words</span></div>
+  <div class="footer-links">
+    <a href="#">Colecciones</a>
+    <a href="#">Preguntas frecuentes</a>
+    <a href="#">Contacto</a>
+    <a href="#">Política de privacidad</a>
+  </div>
+  <div class="footer-copy">© 2026 LittleWords. Todos los derechos reservados.</div>
+</footer>
+
+</body>
+</html>
